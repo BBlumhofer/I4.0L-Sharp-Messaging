@@ -1,0 +1,12 @@
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/I40Sharp.Messaging.csproj.AssemblyReference.cache
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/I40Sharp.Messaging.GeneratedMSBuildEditorConfig.editorconfig
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/I40Sharp.Messaging.AssemblyInfoInputs.cache
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/I40Sharp.Messaging.AssemblyInfo.cs
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/I40Sharp.Messaging.csproj.CoreCompileInputs.cache
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/bin/Debug/net10.0/I40Sharp.Messaging.deps.json
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/bin/Debug/net10.0/I40Sharp.Messaging.dll
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/bin/Debug/net10.0/I40Sharp.Messaging.pdb
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/I40Sharp.Messaging.dll
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/refint/I40Sharp.Messaging.dll
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/I40Sharp.Messaging.pdb
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/Debug/net10.0/ref/I40Sharp.Messaging.dll
