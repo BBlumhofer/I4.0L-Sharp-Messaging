@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("I40Sharp.Messaging.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb80e964d86ab5cd921d708f312ed62abf3f7045")]
 [assembly: System.Reflection.AssemblyProductAttribute("I40Sharp.Messaging.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("I40Sharp.Messaging.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

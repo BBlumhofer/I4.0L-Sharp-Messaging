@@ -98,3 +98,4 @@
 /home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging.Tests/obj/Debug/net10.0/I40Sharp.Messaging.Tests.pdb
 /home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging.Tests/obj/Debug/net10.0/I40Sharp.Messaging.Tests.genruntimeconfig.cache
 /home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging.Tests/obj/Debug/net10.0/ref/I40Sharp.Messaging.Tests.dll
+/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging.Tests/obj/Debug/net10.0/I40Sharp.Messaging.Tests.sourcelink.json
