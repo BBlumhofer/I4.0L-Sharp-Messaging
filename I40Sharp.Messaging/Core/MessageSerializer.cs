@@ -1,6 +1,7 @@
-using I40Sharp.Messaging.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using I40Sharp.Messaging.Models;
+using BaSyx.Models.AdminShell;
 
 namespace I40Sharp.Messaging.Core;
 
@@ -18,7 +19,9 @@ public class MessageSerializer
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = false,
-            Converters = { new SubmodelElementConverter() }
+            Converters = { 
+                new SubmodelElementConverter()
+            }
         };
     }
     

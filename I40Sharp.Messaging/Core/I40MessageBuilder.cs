@@ -1,4 +1,6 @@
 using I40Sharp.Messaging.Models;
+using BaSyx.Models.AdminShell;
+using System.Reflection;
 
 namespace I40Sharp.Messaging.Core;
 
@@ -126,5 +128,55 @@ public class I40MessageBuilder
         
         if (string.IsNullOrEmpty(_message.Frame.ConversationId))
             throw new InvalidOperationException("ConversationId ist erforderlich");
+    }
+
+    /// <summary>
+    /// Erstellt eine Property mit korrekter ValueType-Serialisierung (wie AAS-Sharp-Client)
+    /// </summary>
+    public static Property<string> CreateStringProperty(string idShort, string value)
+    {
+        var property = new Property<string>(idShort, value ?? string.Empty);
+        SetValueType(property, "xs:string");
+        return property;
+    }
+    
+    /// <summary>
+    /// Erstellt eine Boolean Property mit korrekter ValueType-Serialisierung
+    /// </summary>
+    public static Property<bool> CreateBooleanProperty(string idShort, bool value)
+    {
+        var property = new Property<bool>(idShort, value);
+        SetValueType(property, "xs:boolean");
+        return property;
+    }
+    
+    /// <summary>
+    /// Erstellt eine Integer Property mit korrekter ValueType-Serialisierung
+    /// </summary>
+    public static Property<int> CreateIntegerProperty(string idShort, int value)
+    {
+        var property = new Property<int>(idShort, value);
+        SetValueType(property, "xs:integer");
+        return property;
+    }
+    
+    /// <summary>
+    /// Setzt ValueType via Reflection (wie AAS-Sharp-Client SubmodelElementFactory)
+    /// Dies ist notwendig, damit BaSyx die Values korrekt serialisiert!
+    /// </summary>
+    private static void SetValueType(Property property, string valueType)
+    {
+        var valueTypeProp = property
+            .GetType()
+            .GetProperty(
+                "ValueType",
+                BindingFlags.Instance |
+                BindingFlags.Public |
+                BindingFlags.NonPublic);
+        
+        if (valueTypeProp != null && valueTypeProp.CanWrite)
+        {
+            valueTypeProp.SetValue(property, valueType);
+        }
     }
 }

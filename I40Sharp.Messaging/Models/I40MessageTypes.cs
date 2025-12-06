@@ -16,6 +16,7 @@ public static class I40MessageTypes
     public const string INFORM_CONFIRM = "informConfirm";
     public const string FAILURE = "failure";
     public const string CONSENT = "consent";
+    public const string REFUSAL = "refusal";
     
     // Requirement-Oriented
     public const string REQUIREMENT = "requirement";
