@@ -61,19 +61,33 @@ public class MqttTransport : IMessagingTransport
     
     public async Task PublishAsync(string topic, string payload, CancellationToken cancellationToken = default)
     {
-        if (!IsConnected)
+        // Debug: Zeige Topic, Payload-Größe und Verbindungsstatus
+        try
         {
-            throw new InvalidOperationException("MQTT Client ist nicht verbunden");
+            var conn = IsConnected;
+            Console.WriteLine($"[MqttTransport] PublishAsync called. Topic='{topic}', PayloadLength={payload?.Length ?? 0}, IsConnected={conn}");
+
+            if (!conn)
+            {
+                throw new InvalidOperationException("MQTT Client ist nicht verbunden");
+            }
+
+            var message = new MqttApplicationMessageBuilder()
+                .WithTopic(topic)
+                .WithPayload(payload)
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                .WithRetainFlag(false)
+                .Build();
+
+            await _mqttClient.PublishAsync(message, cancellationToken);
+
+            Console.WriteLine($"[MqttTransport] PublishAsync succeeded. Topic='{topic}'");
         }
-        
-        var message = new MqttApplicationMessageBuilder()
-            .WithTopic(topic)
-            .WithPayload(payload)
-            .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
-            .WithRetainFlag(false)
-            .Build();
-        
-        await _mqttClient.PublishAsync(message, cancellationToken);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[MqttTransport] PublishAsync FAILED. Topic='{topic}', Exception={ex.GetType().Name}: {ex.Message}");
+            throw;
+        }
     }
     
     public async Task SubscribeAsync(string topic, CancellationToken cancellationToken = default)

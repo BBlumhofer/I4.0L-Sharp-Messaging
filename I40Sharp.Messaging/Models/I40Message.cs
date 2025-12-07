@@ -12,7 +12,7 @@ public class I40Message
     public MessageFrame Frame { get; set; } = new();
     
     [JsonPropertyName("interactionElements")]
-    public List<SubmodelElement> InteractionElements { get; set; } = new();
+    public List<ISubmodelElement> InteractionElements { get; set; } = new();
     
     /// <summary>
     /// Zeitstempel wann die Nachricht erstellt wurde

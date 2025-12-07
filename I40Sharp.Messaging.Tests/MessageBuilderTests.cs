@@ -1,5 +1,6 @@
 using I40Sharp.Messaging.Models;
 using I40Sharp.Messaging.Core;
+using BaSyx.Models.AdminShell;
 using Xunit;
 
 namespace I40Sharp.Messaging.Tests;
@@ -104,12 +105,7 @@ public class MessageBuilderTests
     {
         // Arrange
         var builder = new I40MessageBuilder();
-        var property = new Property
-        {
-            IdShort = "TestProperty",
-            Value = "TestValue",
-            ValueType = "xs:string"
-        };
+        var property = I40MessageBuilder.CreateStringProperty("TestProperty", "TestValue");
         
         // Act
         var message = builder
@@ -121,7 +117,7 @@ public class MessageBuilderTests
         
         // Assert
         Assert.Single(message.InteractionElements);
-        Assert.IsType<Property>(message.InteractionElements[0]);
+        Assert.IsAssignableFrom<Property>(message.InteractionElements[0]);
         Assert.Equal("TestProperty", message.InteractionElements[0].IdShort);
     }
 }

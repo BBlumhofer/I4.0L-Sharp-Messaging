@@ -677,25 +677,32 @@
     ]
   },
   "packageFolders": {
-    "/home/benjamin/.nuget/packages/": {}
+    "C:\\Users\\bebl01\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/I40Sharp.Messaging.csproj",
+      "projectUniqueName": "C:\\Users\\bebl01\\Repos\\CSharpEnv\\I4.0L-Sharp-Messaging\\I40Sharp.Messaging\\I40Sharp.Messaging.csproj",
       "projectName": "I40Sharp.Messaging",
-      "projectPath": "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/I40Sharp.Messaging.csproj",
-      "packagesPath": "/home/benjamin/.nuget/packages/",
-      "outputPath": "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/",
+      "projectPath": "C:\\Users\\bebl01\\Repos\\CSharpEnv\\I4.0L-Sharp-Messaging\\I40Sharp.Messaging\\I40Sharp.Messaging.csproj",
+      "packagesPath": "C:\\Users\\bebl01\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\bebl01\\Repos\\CSharpEnv\\I4.0L-Sharp-Messaging\\I40Sharp.Messaging\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/home/benjamin/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\bebl01\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "/usr/lib/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -749,7 +756,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.100/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -1032,7 +1039,7 @@
       "code": "NU1510",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "PackageReference System.Text.Json will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
+      "message": "PackageReference System.Text.Json wird nicht gekürzt. Erwägen Sie, dieses Paket aus Ihren Abhängigkeiten zu entfernen, da es wahrscheinlich nicht erforderlich ist.",
       "libraryId": "System.Text.Json",
       "targetGraphs": [
         "net10.0"

@@ -1,7 +1,9 @@
+using System.Linq;
 using I40Sharp.Messaging;
 using I40Sharp.Messaging.Core;
 using I40Sharp.Messaging.Models;
 using I40Sharp.Messaging.Transport;
+using BaSyx.Models.AdminShell;
 
 namespace I40Sharp.Messaging.Examples;
 
@@ -60,32 +62,16 @@ public class BasicExample
             Console.WriteLine("\n--- Beispiel 2: Call for Proposal ---");
             var conversationId = client.CreateConversation();
             
-            var stepProperty = new Property
-            {
-                IdShort = "StepTitle",
-                Value = "Assemble",
-                ValueType = "xs:string",
-                SemanticId = new SemanticId
-                {
-                    Keys = new List<Key>
-                    {
-                        new Key { Type = "GlobalReference", Value = "https://smartfactory.de/semantics/Step/Title" }
-                    }
-                }
-            };
+            var stepProperty = I40MessageBuilder.CreateStringProperty("StepTitle", "Assemble");
+            stepProperty.SemanticId = new Reference(
+                new Key(KeyType.GlobalReference, "https://smartfactory.de/semantics/Step/Title"));
             
-            var stepCollection = new SubmodelElementCollection
+            var stepCollection = new SubmodelElementCollection("Step0001")
             {
-                IdShort = "Step0001",
-                SemanticId = new SemanticId
-                {
-                    Keys = new List<Key>
-                    {
-                        new Key { Type = "GlobalReference", Value = "https://smartfactory.de/semantics/Step" }
-                    }
-                },
-                Value = new List<SubmodelElement> { stepProperty }
+                SemanticId = new Reference(
+                    new Key(KeyType.GlobalReference, "https://smartfactory.de/semantics/Step"))
             };
+            stepCollection.Value.Value.Add(stepProperty);
             
             var cfpMessage = new I40MessageBuilder()
                 .From("ProductHolon_P24")
@@ -107,12 +93,7 @@ public class BasicExample
                 .WithType(I40MessageTypes.PROPOSAL)
                 .WithConversationId(conversationId)
                 .ReplyingTo(cfpMessage.Frame.MessageId!)
-                .AddElement(new Property
-                {
-                    IdShort = "EstimatedCost",
-                    Value = "42.5",
-                    ValueType = "xs:double"
-                })
+                .AddElement(new Property<double>("EstimatedCost", 42.5))
                 .Build();
             
             await client.PublishAsync(proposalMessage);

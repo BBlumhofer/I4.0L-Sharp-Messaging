@@ -2,6 +2,7 @@ using I40Sharp.Messaging;
 using I40Sharp.Messaging.Core;
 using I40Sharp.Messaging.Models;
 using I40Sharp.Messaging.Transport;
+using BaSyx.Models.AdminShell;
 using Xunit;
 
 namespace I40Sharp.Messaging.Tests.Integration;
@@ -92,12 +93,7 @@ public class MessagingClientIntegrationTests : IDisposable
             .From("P24")
             .To("RH2")
             .WithType(I40MessageTypes.CALL_FOR_PROPOSAL)
-            .AddElement(new Property
-            {
-                IdShort = "TestProperty",
-                Value = "TestValue",
-                ValueType = "xs:string"
-            })
+            .AddElement(new Property<string>("TestProperty", "TestValue"))
             .Build();
         
         // Act
@@ -115,7 +111,7 @@ public class MessagingClientIntegrationTests : IDisposable
         Assert.Equal("P24", receivedMessage?.Frame.Sender.Identification.Id);
         Assert.Equal("RH2", receivedMessage?.Frame.Receiver.Identification.Id);
         Assert.Equal(I40MessageTypes.CALL_FOR_PROPOSAL, receivedMessage?.Frame.Type);
-        Assert.Single(receivedMessage?.InteractionElements ?? new List<SubmodelElement>());
+        Assert.Single(receivedMessage?.InteractionElements ?? new List<ISubmodelElement>());
         
         // Cleanup
         await sender.DisconnectAsync();
