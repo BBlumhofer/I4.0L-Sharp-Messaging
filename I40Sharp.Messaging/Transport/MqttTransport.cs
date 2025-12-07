@@ -65,7 +65,7 @@ public class MqttTransport : IMessagingTransport
         try
         {
             var conn = IsConnected;
-            Console.WriteLine($"[MqttTransport] PublishAsync called. Topic='{topic}', PayloadLength={payload?.Length ?? 0}, IsConnected={conn}");
+            //Console.WriteLine($"[MqttTransport] PublishAsync called. Topic='{topic}', PayloadLength={payload?.Length ?? 0}, IsConnected={conn}");
 
             if (!conn)
             {
@@ -81,7 +81,7 @@ public class MqttTransport : IMessagingTransport
 
             await _mqttClient.PublishAsync(message, cancellationToken);
 
-            Console.WriteLine($"[MqttTransport] PublishAsync succeeded. Topic='{topic}'");
+            //Console.WriteLine($"[MqttTransport] PublishAsync succeeded. Topic='{topic}'");
         }
         catch (Exception ex)
         {
