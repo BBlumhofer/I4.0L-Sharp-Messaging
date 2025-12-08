@@ -1,9 +1,7 @@
-using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using BaSyx.Models.AdminShell;
-using BaSyx.Models.Extensions;
 using I40Sharp.Messaging.Models;
+using BaSyx.Models.AdminShell;
 
 namespace I40Sharp.Messaging.Core;
 
@@ -21,13 +19,8 @@ public class MessageSerializer
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = false,
+            Converters = { new SubmodelElementConverter() }
         };
-        // Enable polymorphic AAS element (de)serialization
-        _options.Converters.Add(new FullSubmodelElementConverter(new ConverterOptions()));
-        _options.Converters.Add(new SubmodelElementConverter());
-        _options.Converters.Add(new KeyInterfaceConverter());
-        _options.Converters.Add(new ReferenceInterfaceConverter());
-        _options.Converters.Add(new JsonStringEnumConverter());
     }
     
     /// <summary>
@@ -72,73 +65,54 @@ public class MessageSerializer
 }
 
 /// <summary>
-/// Adapter that reuses the BaSyx FullSubmodelElementConverter for concrete SubmodelElement types.
+/// Custom JSON Converter für polymorphe SubmodelElement Hierarchie
 /// </summary>
-public class SubmodelElementConverter : JsonConverter<SubmodelElement>
+public class SubmodelElementConverter : JsonConverter<ISubmodelElement>
 {
-    private readonly FullSubmodelElementConverter _innerConverter;
-
-    public SubmodelElementConverter()
+    public override ISubmodelElement? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        _innerConverter = new FullSubmodelElementConverter(new ConverterOptions());
-    }
-
-    public override SubmodelElement? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        return _innerConverter.Read(ref reader, typeof(ISubmodelElement), options) as SubmodelElement;
-    }
-
-    public override void Write(Utf8JsonWriter writer, SubmodelElement value, JsonSerializerOptions options)
-    {
-        _innerConverter.Write(writer, value, options);
-    }
-}
-
-/// <summary>
-/// Ensures BaSyx references stored as interfaces can be materialized.
-/// </summary>
-public class ReferenceInterfaceConverter : JsonConverter<IReference>
-{
-    public override IReference? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TokenType == JsonTokenType.Null)
+        using var doc = JsonDocument.ParseValue(ref reader);
+        var root = doc.RootElement;
+        // Handle arrays that represent anonymous collections (some senders emit interactionElements as nested arrays)
+        if (root.ValueKind == JsonValueKind.Array)
         {
+            var json = root.GetRawText();
+            // Try to deserialize array items as SubmodelElement and wrap into a SubmodelElementCollection
+            try
+            {
+                var items = JsonSerializer.Deserialize<List<SubmodelElement>>(json, options) ?? new List<SubmodelElement>();
+                var coll = new SubmodelElementCollection("Collection");
+                foreach (var it in items)
+                {
+                    if (it is ISubmodelElement sme)
+                        coll.Add(sme);
+                }
+                return coll;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        if (!root.TryGetProperty("modelType", out var modelTypeProperty))
             return null;
-        }
 
-        return JsonSerializer.Deserialize<Reference>(ref reader, options);
-    }
+        var modelType = modelTypeProperty.GetString();
+        var jsonObj = root.GetRawText();
 
-    public override void Write(Utf8JsonWriter writer, IReference value, JsonSerializerOptions options)
-    {
-        if (value is null)
+        return modelType switch
         {
-            writer.WriteNullValue();
-            return;
-        }
-
-        JsonSerializer.Serialize(writer, value, value.GetType(), options);
-    }
-}
-
-/// <summary>
-/// Allows BaSyx key interfaces to be deserialized.
-/// </summary>
-public class KeyInterfaceConverter : JsonConverter<IKey>
-{
-    public override IKey? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TokenType == JsonTokenType.Null)
-        {
-            return null;
-        }
-
-        return JsonSerializer.Deserialize<Key>(ref reader, options);
+            "Property" => JsonSerializer.Deserialize<Property>(jsonObj, options),
+            "SubmodelElementCollection" => JsonSerializer.Deserialize<SubmodelElementCollection>(jsonObj, options),
+            "SubmodelElementList" => JsonSerializer.Deserialize<SubmodelElementList>(jsonObj, options),
+            _ => JsonSerializer.Deserialize<SubmodelElement>(jsonObj, options)
+        };
     }
 
-    public override void Write(Utf8JsonWriter writer, IKey value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, ISubmodelElement value, JsonSerializerOptions options)
     {
-        if (value is null)
+        if (value == null)
         {
             writer.WriteNullValue();
             return;
