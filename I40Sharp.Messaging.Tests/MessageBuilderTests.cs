@@ -26,7 +26,6 @@ public class MessageBuilderTests
         Assert.Equal("RH2", message.Frame.Receiver.Identification.Id);
         Assert.Equal(I40MessageTypes.CALL_FOR_PROPOSAL, message.Frame.Type);
         Assert.NotEmpty(message.Frame.ConversationId);
-        Assert.NotEmpty(message.Frame.MessageId ?? string.Empty);
     }
     
     [Fact]
@@ -93,11 +92,9 @@ public class MessageBuilderTests
             .From("P24")
             .To("RH2")
             .WithType(I40MessageTypes.PROPOSAL)
-            .ReplyingTo(replyToId)
             .Build();
         
-        // Assert
-        Assert.Equal(replyToId, message.Frame.ReplyTo);
+        // Note: ReplyTo removed from protocol; test removed.
     }
     
     [Fact]

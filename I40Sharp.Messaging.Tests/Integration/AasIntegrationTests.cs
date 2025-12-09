@@ -200,7 +200,6 @@ public class AasIntegrationTests : IDisposable
             .To("ProductHolon_P24")
             .WithType(I40MessageTypes.PROPOSAL)
             .WithConversationId(conversationId)
-            .ReplyingTo(cfp.Frame.MessageId!)
             .AddElement(new Property<double>("EstimatedCost", 45.0))
             .AddElement(new Property<int>("EstimatedDuration", 120))
             .Build();
@@ -210,7 +209,6 @@ public class AasIntegrationTests : IDisposable
             .To("ProductHolon_P24")
             .WithType(I40MessageTypes.PROPOSAL)
             .WithConversationId(conversationId)
-            .ReplyingTo(cfp.Frame.MessageId!)
             .AddElement(new Property<double>("EstimatedCost", 42.0))
             .AddElement(new Property<int>("EstimatedDuration", 140))
             .Build();
@@ -233,7 +231,6 @@ public class AasIntegrationTests : IDisposable
             .To(bestProposal.Frame.Sender.Identification.Id)
             .WithType(I40MessageTypes.ACCEPT_PROPOSAL)
             .WithConversationId(conversationId)
-            .ReplyingTo(bestProposal.Frame.MessageId!)
             .Build();
         
         await product.PublishAsync(acceptance, "factory/negotiation");

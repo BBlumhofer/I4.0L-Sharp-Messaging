@@ -17,8 +17,7 @@
       }
     },
     "type": "inform",
-    "conversationId": "log-sample-test",
-    "messageId": "99cff271-0955-4861-bdc3-872a1d0847c9"
+    "conversationId": "log-sample-test"
   },
   "interactionElements": [
   {

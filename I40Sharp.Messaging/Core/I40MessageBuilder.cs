@@ -12,7 +12,6 @@ public class I40MessageBuilder
     
     public I40MessageBuilder()
     {
-        _message.Frame.MessageId = Guid.NewGuid().ToString();
         _message.Frame.ConversationId = Guid.NewGuid().ToString();
     }
     
@@ -60,23 +59,7 @@ public class I40MessageBuilder
         return this;
     }
     
-    /// <summary>
-    /// Setzt eine spezifische MessageId
-    /// </summary>
-    public I40MessageBuilder WithMessageId(string messageId)
-    {
-        _message.Frame.MessageId = messageId;
-        return this;
-    }
-    
-    /// <summary>
-    /// Setzt ReplyTo für Request-Response Pattern
-    /// </summary>
-    public I40MessageBuilder ReplyingTo(string messageId)
-    {
-        _message.Frame.ReplyTo = messageId;
-        return this;
-    }
+    // Note: MessageId and ReplyTo are deprecated/removed from protocol; use ConversationId for correlation.
     
     /// <summary>
     /// Setzt eine Deadline für die Antwort

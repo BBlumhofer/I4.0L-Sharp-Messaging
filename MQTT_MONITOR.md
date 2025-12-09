@@ -39,7 +39,7 @@ dotnet run --project Tools/MqttMonitor.cs -- mqtt.example.com 1883
    From:         P24
    To:           RH2
    Conversation: abc-123-def
-   MessageId:    msg-001
+   
    Elements:     1
      • Property: RequiredCapability
        = Assemble (xs:string)
@@ -51,8 +51,7 @@ dotnet run --project Tools/MqttMonitor.cs -- mqtt.example.com 1883
    From:         RH2
    To:           P24
    Conversation: abc-123-def
-   MessageId:    msg-002
-   ReplyTo:      msg-001
+   
    Elements:     2
      • Property: EstimatedCost
        = 42.5 (xs:double)

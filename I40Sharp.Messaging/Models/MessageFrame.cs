@@ -52,11 +52,7 @@ public class MessageFrame
     [JsonPropertyName("conversationId")]
     public string ConversationId { get; set; } = string.Empty;
     
-    [JsonPropertyName("messageId")]
-    public string? MessageId { get; set; }
-    
-    [JsonPropertyName("replyTo")]
-    public string? ReplyTo { get; set; }
+    // Note: messageId and replyTo removed from protocol — use ConversationId for correlation
     
     [JsonPropertyName("replyBy")]
     public DateTime? ReplyBy { get; set; }

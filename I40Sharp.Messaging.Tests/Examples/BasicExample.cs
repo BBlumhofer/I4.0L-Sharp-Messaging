@@ -92,7 +92,6 @@ public class BasicExample
                 .To("ProductHolon_P24")
                 .WithType(I40MessageTypes.PROPOSAL)
                 .WithConversationId(conversationId)
-                .ReplyingTo(cfpMessage.Frame.MessageId!)
                 .AddElement(new Property<double>("EstimatedCost", 42.5))
                 .Build();
             
