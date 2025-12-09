@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using I40Sharp.Messaging.Models;
 using BaSyx.Models.AdminShell;
+using BaSyx.Models.Extensions;
 
 namespace I40Sharp.Messaging.Core;
 
@@ -19,7 +20,12 @@ public class MessageSerializer
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = false,
-            Converters = { new SubmodelElementConverter() }
+            Converters =
+            {
+                new BaSyx.Models.Extensions.FullSubmodelElementConverter(new BaSyx.Models.Extensions.ConverterOptions()),
+                new BaSyx.Models.Extensions.ReferenceJsonConverter(),
+                new JsonStringEnumConverter()
+            }
         };
     }
     
