@@ -6,8 +6,10 @@ namespace I40Sharp.Messaging.Models;
 public static class I40MessageTypes
 {
     // Negotiation Types
+    // Use camelCase names to match messaging spec and existing docs
     public const string CALL_FOR_PROPOSAL = "callForProposal";
     public const string PROPOSAL = "proposal";
+    public const string REFUSE_PROPOSAL = "refuseProposal";
     public const string ACCEPT_PROPOSAL = "acceptProposal";
     public const string DENY_PROPOSAL = "denyProposal";
     
