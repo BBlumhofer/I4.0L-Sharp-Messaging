@@ -14,12 +14,14 @@
         "outputPath": "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
+          "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/nuget.config",
           "/home/benjamin/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "/home/benjamin/AgentDevelopment/external_libs/basyx-dotnet/artifacts/nuget": {},
           "/usr/lib/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -47,7 +49,7 @@
           "dependencies": {
             "BaSyx.Models": {
               "target": "Package",
-              "version": "[2.0.24, )"
+              "version": "[2.0.25, )"
             },
             "MQTTnet": {
               "target": "Package",
