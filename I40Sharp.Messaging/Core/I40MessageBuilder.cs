@@ -78,7 +78,8 @@ public class I40MessageBuilder
         _message.InteractionElements.Add(element);
         return this;
     }
-    
+
+
     /// <summary>
     /// Fügt mehrere SubmodelElements hinzu
     /// </summary>
@@ -86,7 +87,9 @@ public class I40MessageBuilder
     {
         _message.InteractionElements.AddRange(elements);
         return this;
-    }
+    }    
+    
+
     
     /// <summary>
     /// Erstellt die fertige I4.0 Message

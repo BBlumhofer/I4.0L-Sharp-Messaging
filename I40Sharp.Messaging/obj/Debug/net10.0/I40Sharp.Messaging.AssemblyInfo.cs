@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("I40Sharp.Messaging")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cde28fad0b9f86643d56dd5966b35d678cbad4ed")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3502d857af1a57df90254aff3c15756634f702ef")]
 [assembly: System.Reflection.AssemblyProductAttribute("I40Sharp.Messaging")]
 [assembly: System.Reflection.AssemblyTitleAttribute("I40Sharp.Messaging")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

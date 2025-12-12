@@ -219,6 +219,23 @@ public class MessageSerializerTests
     }
 
     [Fact]
+    public void Deserialize_CallForProposal_WithCapabilityContainer()
+    {
+        const string payload = """
+        {"frame":{"sender":{"identification":{"id":"DispatchingAgent_phuket"},"role":{"name":"DispatchingAgent"}},"receiver":{"identification":{"id":"Broadcast"},"role":{"name":"ModuleHolon"}},"type":"callForProposal","conversationId":"2542144e-c759-4295-adc5-b9a364b06514"},"interactionElements":[{"idShort":"Capability","kind":"Instance","modelType":"Property","valueType":"string","value":"Assemble"},{"idShort":"RequirementId","kind":"Instance","modelType":"Property","valueType":"string","value":"c5c4d9e1-3c37-4a63-acba-2a35c6b6a629"},{"idShort":"ProductId","kind":"Instance","modelType":"Property","valueType":"string","value":"https://smartfactory.de/shells/LG3JsASu4_"},{"idShort":"AssembleContainer","kind":"Instance","modelType":"SubmodelElementCollection","semanticId":{"type":"ExternalReference","keys":[{"type":"GlobalReference","value":"https://admin-shell.io/idta/CapabilityDescription/CapabilityContainer/1/0"}]},"value":[{"idShort":"Assemble","kind":"Instance","modelType":"Capability","semanticId":{"type":"ExternalReference","keys":[{"type":"GlobalReference","value":"https://wiki.eclipse.org/BaSyx_/_Documentation_/_Submodels_/_Capability#Capability"}]}},{"idShort":"PropertySet","kind":"Instance","modelType":"SubmodelElementCollection","semanticId":{"type":"ExternalReference","keys":[{"type":"GlobalReference","value":"https://admin-shell.io/idta/CapabilityDescription/PropertySet/1/0"}]},"value":[{"idShort":"GripForceContainer","kind":"Instance","modelType":"SubmodelElementCollection","semanticId":{"type":"ExternalReference","keys":[{"type":"GlobalReference","value":"https://admin-shell.io/idta/CapabilityDescription/PropertyContainer/1/0"}]},"value":[{"idShort":"GripForce","kind":"Instance","modelType":"Property","valueType":"double","value":"15.1"}]},{"idShort":"ProductWeightContainer","kind":"Instance","modelType":"SubmodelElementCollection","semanticId":{"type":"ExternalReference","keys":[{"type":"GlobalReference","value":"https://admin-shell.io/idta/CapabilityDescription/PropertyContainer/1/0"}]},"value":[{"idShort":"ProductWeight","kind":"Instance","modelType":"Property","valueType":"double","value":"1.1"}]}]}]}]}
+        """;
+
+        var message = _serializer.Deserialize(payload);
+
+        Assert.NotNull(message);
+        Assert.Equal("callForProposal", message!.Frame.Type);
+        var capability = Assert.IsType<Property>(message.InteractionElements.First(e => e is Property { IdShort: "Capability" }));
+        Assert.Equal("Assemble", capability.Value?.Value);
+        var container = Assert.IsType<SubmodelElementCollection>(message.InteractionElements.First(e => e.IdShort == "AssembleContainer"));
+        Assert.NotEmpty(container.Value.Value);
+    }
+
+    [Fact]
     public void Deserialize_MessageWithSemanticReferences_Succeeds()
     {
         // Arrange: submodel elements with semantic ids produce IReference payloads

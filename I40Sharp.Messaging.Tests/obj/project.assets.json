@@ -41,7 +41,7 @@
           "lib/net8.0/BaSyx.Clients.Http.dll": {}
         }
       },
-      "BaSyx.Models/2.0.24": {
+      "BaSyx.Models/2.0.25": {
         "type": "package",
         "dependencies": {
           "BaSyx.Utils": "2.0.24",
@@ -886,10 +886,11 @@
           "BaSyx.AAS.Client.Http": "1.0.0",
           "BaSyx.API": "2.0.24",
           "BaSyx.Clients.Http": "2.0.24",
-          "BaSyx.Models": "2.0.24",
+          "BaSyx.Models": "2.0.25",
           "BaSyx.Registry.Client.Http": "2.0.24",
           "BaSyx.Submodel.Client.Http": "1.0.0",
           "BaSyx.Utils": "2.0.24",
+          "I40Sharp.Messaging": "1.0.0",
           "Microsoft.Extensions.Http": "8.0.0",
           "Microsoft.Extensions.Logging.Console": "8.0.0",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.23.0"
@@ -905,7 +906,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "BaSyx.Models": "2.0.24",
+          "BaSyx.Models": "2.0.25",
           "MQTTnet": "4.3.7.1207"
         },
         "compile": {
@@ -957,14 +958,13 @@
         "lib/net8.0/BaSyx.Clients.Http.dll"
       ]
     },
-    "BaSyx.Models/2.0.24": {
-      "sha512": "YH1kWh/PGEu9N+djWiqkIWcwWdpowLuNwZ8iEekKTI7xl/nZa6Olo/2TTN9vKEK1RUdZ3/gPn5SwfsjdFdMKrQ==",
+    "BaSyx.Models/2.0.25": {
+      "sha512": "wZ8PCv6JTZDYCjddgyiFydUYXzk7ZYb8lDH0BoKsrSTZrvkK1h+MTH0iCUzUoW4awLZfYIyU8YzTU7gHfgLQPg==",
       "type": "package",
-      "path": "basyx.models/2.0.24",
+      "path": "basyx.models/2.0.25",
       "files": [
         ".nupkg.metadata",
-        ".signature.p7s",
-        "basyx.models.2.0.24.nupkg.sha512",
+        "basyx.models.2.0.25.nupkg.sha512",
         "basyx.models.nuspec",
         "basyxlogo.png",
         "lib/net8.0/BaSyx.Models.dll"
@@ -2255,43 +2255,38 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\bebl01\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/home/benjamin/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bebl01\\Repos\\CSharpEnv\\I4.0L-Sharp-Messaging\\I40Sharp.Messaging.Tests\\I40Sharp.Messaging.Tests.csproj",
+      "projectUniqueName": "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging.Tests/I40Sharp.Messaging.Tests.csproj",
       "projectName": "I40Sharp.Messaging.Tests",
-      "projectPath": "C:\\Users\\bebl01\\Repos\\CSharpEnv\\I4.0L-Sharp-Messaging\\I40Sharp.Messaging.Tests\\I40Sharp.Messaging.Tests.csproj",
-      "packagesPath": "C:\\Users\\bebl01\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bebl01\\Repos\\CSharpEnv\\I4.0L-Sharp-Messaging\\I40Sharp.Messaging.Tests\\obj\\",
+      "projectPath": "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging.Tests/I40Sharp.Messaging.Tests.csproj",
+      "packagesPath": "/home/benjamin/.nuget/packages/",
+      "outputPath": "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging.Tests/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\bebl01\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/nuget.config",
+        "/home/benjamin/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
+        "/home/benjamin/AgentDevelopment/external_libs/basyx-dotnet/artifacts/nuget": {},
+        "/usr/lib/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\bebl01\\Repos\\CSharpEnv\\AAS-Sharp-Client\\AAS Sharp Client.csproj": {
-              "projectPath": "C:\\Users\\bebl01\\Repos\\CSharpEnv\\AAS-Sharp-Client\\AAS Sharp Client.csproj"
+            "/home/benjamin/AgentDevelopment/AAS-Sharp-Client/AAS Sharp Client.csproj": {
+              "projectPath": "/home/benjamin/AgentDevelopment/AAS-Sharp-Client/AAS Sharp Client.csproj"
             },
-            "C:\\Users\\bebl01\\Repos\\CSharpEnv\\I4.0L-Sharp-Messaging\\I40Sharp.Messaging\\I40Sharp.Messaging.csproj": {
-              "projectPath": "C:\\Users\\bebl01\\Repos\\CSharpEnv\\I4.0L-Sharp-Messaging\\I40Sharp.Messaging\\I40Sharp.Messaging.csproj"
+            "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/I40Sharp.Messaging.csproj": {
+              "projectPath": "/home/benjamin/AgentDevelopment/I4.0-Sharp-Messaging/I40Sharp.Messaging/I40Sharp.Messaging.csproj"
             }
           }
         }
@@ -2349,7 +2344,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.100/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
