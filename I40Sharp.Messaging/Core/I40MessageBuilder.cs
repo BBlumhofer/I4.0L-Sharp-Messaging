@@ -49,6 +49,24 @@ public class I40MessageBuilder
         _message.Frame.Type = messageType;
         return this;
     }
+
+    /// <summary>
+    /// Sets the message type including a semantic subtype token (type/subtype).
+    /// </summary>
+    public I40MessageBuilder WithType(string messageType, I40MessageTypeSubtypes subtype)
+    {
+        if (subtype == I40MessageTypeSubtypes.None)
+        {
+            return WithType(messageType);
+        }
+
+        var subtypeToken = subtype.ToProtocolString();
+        var combined = string.IsNullOrWhiteSpace(subtypeToken)
+            ? messageType
+            : $"{messageType}/{subtypeToken}";
+
+        return WithType(combined);
+    }
     
     /// <summary>
     /// Setzt eine spezifische ConversationId

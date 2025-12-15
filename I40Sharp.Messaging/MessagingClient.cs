@@ -1,6 +1,7 @@
 using I40Sharp.Messaging.Core;
 using I40Sharp.Messaging.Models;
 using I40Sharp.Messaging.Transport;
+using System.Collections.Concurrent;
 
 namespace I40Sharp.Messaging;
 
@@ -15,6 +16,11 @@ public class MessagingClient : IDisposable
     private readonly ConversationManager _conversationManager;
     private readonly string _defaultTopic;
     private bool _disposed;
+
+    private readonly object _inboxLock = new();
+    private readonly Queue<QueuedMessage> _inbox = new();
+
+    private sealed record QueuedMessage(I40Message Message, string Topic, DateTimeOffset ReceivedAt);
     
     /// <summary>
     /// Event wird ausgelöst wenn die Verbindung hergestellt wurde
@@ -30,6 +36,20 @@ public class MessagingClient : IDisposable
     /// Gibt an ob der Client verbunden ist
     /// </summary>
     public bool IsConnected => _transport.IsConnected;
+
+    /// <summary>
+    /// Anzahl aktuell gepufferter, noch nicht konsumierter Nachrichten.
+    /// </summary>
+    public int InboxCount
+    {
+        get
+        {
+            lock (_inboxLock)
+            {
+                return _inbox.Count;
+            }
+        }
+    }
     
     /// <summary>
     /// Erstellt einen neuen MessagingClient
@@ -133,6 +153,50 @@ public class MessagingClient : IDisposable
     {
         _callbackRegistry.RegisterConversationCallback(conversationId, callback);
     }
+
+    /// <summary>
+    /// Versucht eine Nachricht aus der globalen Inbox zu entnehmen, die auf das Prädikat passt.
+    /// Damit gehen Nachrichten nicht verloren, wenn gerade kein Callback registriert ist.
+    /// </summary>
+    public bool TryDequeueMatching(Func<I40Message, string, bool> predicate, out I40Message message, out string topic)
+    {
+        return TryDequeueMatching(predicate, out message, out topic, out _);
+    }
+
+    /// <summary>
+    /// Versucht eine Nachricht zu entnehmen und liefert zusätzlich den Zeitpunkt, wann sie empfangen wurde.
+    /// </summary>
+    public bool TryDequeueMatching(
+        Func<I40Message, string, bool> predicate,
+        out I40Message message,
+        out string topic,
+        out DateTimeOffset receivedAt)
+    {
+        if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+        lock (_inboxLock)
+        {
+            var count = _inbox.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var item = _inbox.Dequeue();
+                if (predicate(item.Message, item.Topic))
+                {
+                    message = item.Message;
+                    topic = item.Topic;
+                    receivedAt = item.ReceivedAt;
+                    return true;
+                }
+
+                _inbox.Enqueue(item);
+            }
+        }
+
+        message = null!;
+        topic = string.Empty;
+        receivedAt = default;
+        return false;
+    }
     
     /// <summary>
     /// Gibt alle Messages einer Conversation zurück
@@ -173,6 +237,18 @@ public class MessagingClient : IDisposable
             var message = _serializer.Deserialize(e.Payload);
             if (message != null)
             {
+                // Global Queueing: immer puffern, auch wenn gerade kein BT-Knoten wartet.
+                lock (_inboxLock)
+                {
+                    _inbox.Enqueue(new QueuedMessage(message, e.Topic ?? string.Empty, DateTimeOffset.UtcNow));
+                    // Basic bound to avoid unbounded growth if consumer is stalled.
+                    // Keep the newest messages by dropping oldest.
+                    while (_inbox.Count > 10_000)
+                    {
+                        _inbox.Dequeue();
+                    }
+                }
+
                 // Message zur Conversation hinzufügen
                 _conversationManager.AddMessage(message);
                 
