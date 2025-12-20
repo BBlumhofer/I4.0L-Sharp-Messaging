@@ -2,6 +2,8 @@ using I40Sharp.Messaging.Core;
 using I40Sharp.Messaging.Models;
 using I40Sharp.Messaging.Transport;
 using System.Collections.Concurrent;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace I40Sharp.Messaging;
 
@@ -16,6 +18,7 @@ public class MessagingClient : IDisposable
     private readonly ConversationManager _conversationManager;
     private readonly string _defaultTopic;
     private bool _disposed;
+    private readonly ILogger _logger;
 
     private readonly object _inboxLock = new();
     private readonly Queue<QueuedMessage> _inbox = new();
@@ -54,13 +57,14 @@ public class MessagingClient : IDisposable
     /// <summary>
     /// Erstellt einen neuen MessagingClient
     /// </summary>
-    public MessagingClient(IMessagingTransport transport, string defaultTopic = "i40/messages")
+    public MessagingClient(IMessagingTransport transport, string defaultTopic = "i40/messages", ILogger? logger = null)
     {
         _transport = transport ?? throw new ArgumentNullException(nameof(transport));
         _serializer = new MessageSerializer();
         _callbackRegistry = new CallbackRegistry();
         _conversationManager = new ConversationManager();
         _defaultTopic = defaultTopic;
+        _logger = logger ?? NullLogger<MessagingClient>.Instance;
         
         _transport.MessageReceived += OnTransportMessageReceived;
         _transport.Connected += (s, e) => Connected?.Invoke(this, EventArgs.Empty);
@@ -164,6 +168,53 @@ public class MessagingClient : IDisposable
     }
 
     /// <summary>
+    /// Dequeues all messages that match the given predicate and returns them as a list.
+    /// This is useful for consumers that want to bulk-consume buffered messages.
+    /// </summary>
+    public List<(I40Message Message, string Topic)> DequeueMatchingAll(Func<I40Message, string, bool> predicate)
+    {
+        var result = new List<(I40Message, string)>();
+        if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+
+        lock (_inboxLock)
+        {
+            var count = _inbox.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var item = _inbox.Dequeue();
+                if (predicate(item.Message, item.Topic))
+                {
+                    result.Add((item.Message, item.Topic));
+                }
+                else
+                {
+                    _inbox.Enqueue(item);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Returns a snapshot of the current inbox (message + topic) without dequeuing.
+    /// Useful for diagnostics.
+    /// </summary>
+    public List<(I40Message Message, string Topic)> PeekInboxSnapshot()
+    {
+        var result = new List<(I40Message, string)>();
+        lock (_inboxLock)
+        {
+            foreach (var item in _inbox)
+            {
+                result.Add((item.Message, item.Topic));
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// Versucht eine Nachricht zu entnehmen und liefert zusätzlich den Zeitpunkt, wann sie empfangen wurde.
     /// </summary>
     public bool TryDequeueMatching(
@@ -237,6 +288,8 @@ public class MessagingClient : IDisposable
             var message = _serializer.Deserialize(e.Payload);
             if (message != null)
             {
+                // Debug: ensure we see raw incoming messages and topics during integration tests
+                _logger.LogDebug("[MessagingClient] Received on topic='{Topic}' type='{Type}' sender='{Sender}'", e.Topic, message.Frame?.Type, message.Frame?.Sender?.Identification?.Id);
                 // Global Queueing: immer puffern, auch wenn gerade kein BT-Knoten wartet.
                 lock (_inboxLock)
                 {
@@ -258,7 +311,7 @@ public class MessagingClient : IDisposable
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Fehler beim Verarbeiten der Nachricht: {ex.Message}");
+            _logger.LogError(ex, "Fehler beim Verarbeiten der Nachricht");
         }
     }
     

@@ -1,4 +1,6 @@
 using I40Sharp.Messaging.Models;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace I40Sharp.Messaging.Core;
 
@@ -9,6 +11,12 @@ public class CallbackRegistry
 {
     private readonly List<CallbackRegistration> _registrations = new();
     private readonly object _lock = new();
+    private readonly ILogger<CallbackRegistry> _logger;
+
+    public CallbackRegistry(ILogger<CallbackRegistry>? logger = null)
+    {
+        _logger = logger ?? NullLogger<CallbackRegistry>.Instance;
+    }
     
     /// <summary>
     /// Registriert einen globalen Callback für alle Nachrichten
@@ -95,12 +103,16 @@ public class CallbackRegistry
     public void InvokeCallbacks(I40Message message)
     {
         List<CallbackRegistration> matchingCallbacks;
-        
+
         lock (_lock)
         {
+            // Show how many callbacks are registered (debug) and how many match (trace)
+            _logger.LogDebug("[CallbackRegistry] RegisteredCallbacks={Count}", _registrations.Count);
+
             matchingCallbacks = _registrations.Where(r => r.Matches(message)).ToList();
+            _logger.LogTrace("[CallbackRegistry] MatchingCallbacks={Count} for type={Type}", matchingCallbacks.Count, message.Frame?.Type);
         }
-        
+
         foreach (var registration in matchingCallbacks)
         {
             try
@@ -109,7 +121,7 @@ public class CallbackRegistry
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Ausführen des Callbacks: {ex.Message}");
+                _logger.LogError(ex, "Fehler beim Ausführen des Callbacks");
             }
         }
     }
