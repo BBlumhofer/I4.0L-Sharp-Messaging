@@ -22,7 +22,7 @@ public class CallbackRegistryTests
             .Build();
         
         // Act
-        registry.InvokeCallbacks(message);
+        registry.InvokeCallbacks(message, "/testTopic");
         
         // Assert
         Assert.True(callbackInvoked);
@@ -50,11 +50,11 @@ public class CallbackRegistryTests
             .Build();
         
         // Act
-        registry.InvokeCallbacks(proposalMessage);
+        registry.InvokeCallbacks(proposalMessage, "/testTopic");
         Assert.True(callbackInvoked);
         
         callbackInvoked = false;
-        registry.InvokeCallbacks(informMessage);
+        registry.InvokeCallbacks(informMessage, "/testTopic");
         
         // Assert
         Assert.False(callbackInvoked);
@@ -82,11 +82,11 @@ public class CallbackRegistryTests
             .Build();
         
         // Act
-        registry.InvokeCallbacks(matchingMessage);
+        registry.InvokeCallbacks(matchingMessage, "/testTopic");
         Assert.True(callbackInvoked);
         
         callbackInvoked = false;
-        registry.InvokeCallbacks(nonMatchingMessage);
+        registry.InvokeCallbacks(nonMatchingMessage, "/testTopic");
         
         // Assert
         Assert.False(callbackInvoked);
@@ -116,11 +116,11 @@ public class CallbackRegistryTests
             .Build();
         
         // Act
-        registry.InvokeCallbacks(matchingMessage);
+        registry.InvokeCallbacks(matchingMessage, "/testTopic");
         Assert.True(callbackInvoked);
         
         callbackInvoked = false;
-        registry.InvokeCallbacks(nonMatchingMessage);
+        registry.InvokeCallbacks(nonMatchingMessage, "/testTopic");
         
         // Assert
         Assert.False(callbackInvoked);
@@ -144,7 +144,7 @@ public class CallbackRegistryTests
             .Build();
         
         // Act
-        registry.InvokeCallbacks(message);
+        registry.InvokeCallbacks(message, "/testTopic");
         
         // Assert
         Assert.True(callback1Invoked);
@@ -168,7 +168,7 @@ public class CallbackRegistryTests
             .Build();
         
         // Act
-        registry.InvokeCallbacks(message);
+        registry.InvokeCallbacks(message, "/testTopic");
         
         // Assert
         Assert.False(callbackInvoked);

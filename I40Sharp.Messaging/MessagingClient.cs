@@ -19,6 +19,7 @@ public class MessagingClient : IDisposable
     private readonly string _defaultTopic;
     private bool _disposed;
     private readonly ILogger _logger;
+    // subscription tracking removed — restore direct transport subscriptions
 
     private readonly object _inboxLock = new();
     private readonly Queue<QueuedMessage> _inbox = new();
@@ -156,6 +157,30 @@ public class MessagingClient : IDisposable
     public void OnConversation(string conversationId, Action<I40Message> callback)
     {
         _callbackRegistry.RegisterConversationCallback(conversationId, callback);
+    }
+
+    /// <summary>
+    /// Entfernt einen zuvor registrierten Callback für eine Conversation
+    /// </summary>
+    public void OffConversation(string conversationId, Action<I40Message> callback)
+    {
+        _callbackRegistry.UnregisterConversationCallback(conversationId, callback);
+    }
+
+    /// <summary>
+    /// Registriert einen Callback für ein bestimmtes Topic
+    /// </summary>
+    public void OnTopic(string topic, Action<I40Message, string> callback)
+    {
+        _callbackRegistry.RegisterTopicCallback(topic, callback);
+    }
+
+    /// <summary>
+    /// Entfernt einen zuvor registrierten Topic-Callback
+    /// </summary>
+    public void OffTopic(string topic, Action<I40Message, string> callback)
+    {
+        _callbackRegistry.UnregisterTopicCallback(topic, callback);
     }
 
     /// <summary>
@@ -305,8 +330,8 @@ public class MessagingClient : IDisposable
                 // Message zur Conversation hinzufügen
                 _conversationManager.AddMessage(message);
                 
-                // Callbacks ausführen
-                _callbackRegistry.InvokeCallbacks(message);
+                // Callbacks ausführen (inkl. Topic)
+                _callbackRegistry.InvokeCallbacks(message, e.Topic ?? string.Empty);
             }
         }
         catch (Exception ex)
